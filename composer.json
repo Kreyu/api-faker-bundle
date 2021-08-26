@@ -1,0 +1,19 @@
+{
+    "name": "kreyu/api-faker-bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian Wróblewski",
+            "email": "kontakt@swroblewski.pl"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kreyu\\Bundle\\ApiFakerBundle\\": "src/"
+        }
+    }
+}
