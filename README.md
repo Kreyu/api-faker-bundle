@@ -97,6 +97,8 @@ kreyu_api_faker:
 
 Endpoints of given path should be accessible right away. If not, clear your cache.
 
+Above configuration will create a route `GET /fake-api/auth-api/login` named `fake_api_auth_api_login`, and return response with given status code and body.
+
 ## FAQ
 
 Q) Why not just create controllers manually for each API?  
