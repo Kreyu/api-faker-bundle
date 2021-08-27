@@ -34,10 +34,15 @@ class Configuration implements ConfigurationInterface
                                         ->end()
                                         ->arrayNode('response')
                                             ->children()
-                                                ->integerNode('status')
-                                                    ->isRequired()
+                                                ->integerNode('status')->end()
+                                                ->variableNode('body')
+                                                    ->validate()
+                                                        ->ifTrue(function ($v) {
+                                                            return false === is_string($v) && false === is_array($v);
+                                                        })
+                                                        ->thenInvalid('Response body should be either string or array')
+                                                    ->end()
                                                 ->end()
-                                                ->scalarNode('body')->end()
                                             ->end()
                                         ->end() // response
                                     ->end()

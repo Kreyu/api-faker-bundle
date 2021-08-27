@@ -4,13 +4,17 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services
         https://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Kreyu\Bundle\ApiFakerBundle\Routing\RouteLoader">
-            <argument/>
+        <service id="kreyu_api_faker.routing.route_loader" class="Kreyu\Bundle\ApiFakerBundle\Routing\RouteLoader">
+            <argument type="service" id="kreyu_api_faker.configuration.configuration_pool"/>
             <tag name="routing.loader"/>
         </service>
-        <service id="Kreyu\Bundle\ApiFakerBundle\Controller\RouteController">
-            <argument type="service" id="parameter_bag"/>
+        <service id="kreyu_api_faker.controller.endpoint_controller" class="Kreyu\Bundle\ApiFakerBundle\Controller\EndpointController">
+            <argument type="service" id="kreyu_api_faker.configuration.configuration_pool"/>
             <tag name="controller.service_arguments"/>
+        </service>
+        <service id="kreyu_api_faker.configuration.configuration_pool" class="Kreyu\Bundle\ApiFakerBundle\Configuration\ConfigurationPool">
+            <factory class="Kreyu\Bundle\ApiFakerBundle\Configuration\ConfigurationPool" method="createFromConfiguration"/>
+            <argument>%kreyu_api_faker.config%</argument>
         </service>
     </services>
 </container>

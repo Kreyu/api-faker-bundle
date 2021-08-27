@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Kreyu\Bundle\ApiFakerBundle\Routing;
 
-use Kreyu\Bundle\ApiFakerBundle\Controller\RouteController;
+use Kreyu\Bundle\ApiFakerBundle\Configuration\ConfigurationPool;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 class RouteLoader extends Loader
 {
-    private $configuration;
+    private $configurationPool;
     private $isLoaded = false;
 
-    public function __construct(array $configuration)
+    public function __construct(ConfigurationPool $configurationPool, string $env = null)
     {
-        $this->configuration = $configuration;
+        parent::__construct($env);
+
+        $this->configurationPool = $configurationPool;
     }
 
     public function load($resource, $type = null): RouteCollection
@@ -27,22 +29,14 @@ class RouteLoader extends Loader
 
         $routes = new RouteCollection();
 
-        foreach ($this->configuration['applications'] as $application) {
-            foreach ($application['endpoints'] as $index => $endpoint) {
-                $path = trim($endpoint['path'], '/');
+        $endpoints = $this->configurationPool->getEndpoints();
 
-                if (!empty($application['prefix'])) {
-                    $path = trim($application['prefix'], '/') . '/' . $path;
-                }
+        foreach ($endpoints as $endpoint) {
+            $route = new Route($endpoint->getPath());
+            $route->setMethods($endpoint->getMethod());
+            $route->setDefault('_controller', 'kreyu_api_faker.controller.endpoint_controller');
 
-                $route = new Route($path);
-                $route->setMethods($endpoint['method']);
-                $route->setDefault('_controller', sprintf('%s::__invoke', RouteController::class));
-
-                $name = $this->generateRouteName($application['name'], $index);
-
-                $routes->add($name, $route);
-            }
+            $routes->add($endpoint->getPathSlug(), $route);
         }
 
         $this->isLoaded = true;
@@ -53,12 +47,5 @@ class RouteLoader extends Loader
     public function supports($resource, $type = null): bool
     {
         return 'kreyu_api_faker' === $type;
-    }
-
-    private function generateRouteName(string $applicationName, int $index): string
-    {
-        $applicationName = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $applicationName)));
-
-        return sprintf('%s_%d', $applicationName, $index);
     }
 }
