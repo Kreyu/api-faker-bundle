@@ -31,7 +31,7 @@ and add routing configuration (prefixes are optional):
 ```yaml
 # config/routes/dev/kreyu_api_faker.yaml
 
-api_faker:
+kreyu_api_faker:
   resource: .
   type: kreyu_api_faker
   prefix: /fake-api # optional
