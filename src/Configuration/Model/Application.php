@@ -28,7 +28,7 @@ class Application
 
     public function getPrefix(): ?string
     {
-        return trim($this->prefix, '/');
+        return '/' . trim($this->prefix, '/');
     }
 
     public function getEndpoints(): array

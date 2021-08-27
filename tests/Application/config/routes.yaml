@@ -1,0 +1,3 @@
+api_faker:
+  resource: .
+  type: kreyu_api_faker

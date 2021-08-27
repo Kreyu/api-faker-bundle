@@ -12,9 +12,20 @@
         "php": ">=7.2",
         "symfony/polyfill-php80": "^1.23"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "symfony/test-pack": "^1.0",
+        "symfony/framework-bundle": "^3.4|^4.0|^5.0",
+        "symfony/yaml": "^5.3"
+    },
     "autoload": {
         "psr-4": {
             "Kreyu\\Bundle\\ApiFakerBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kreyu\\Bundle\\ApiFakerBundle\\Tests\\": "tests/"
         }
     }
 }

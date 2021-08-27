@@ -15,6 +15,15 @@ class KreyuApiFakerExtension extends Extension
     {
         $config = $this->processConfiguration(new Configuration, $configs);
 
+        // Set default response status depending on the response body.
+        foreach ($config['applications'] as &$application) {
+            foreach ($application['endpoints'] as &$endpoint) {
+                if (null === $endpoint['response']['status']) {
+                    $endpoint['response']['status'] = null !== $endpoint['response']['body'] ? 200 : 204;
+                }
+            }
+        }
+
         $container->setParameter('kreyu_api_faker.config', $config);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

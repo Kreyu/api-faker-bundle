@@ -92,8 +92,8 @@ kreyu_api_faker:
 ```
 
 - if you skip the `response` section completely, then response will be `204 No Content` without body,
-- if you skip the `status` in the `response` (or set it to `null`), then response status code will be `200 OK` or `204 No Content`, depending on the given `body`,
-- if you skip the `body` in the `response` (or set it to `null`), then response will not return body
+- if you skip the `status` in the `response`, then response status code will be `200 OK` or `204 No Content`, depending on the given `body`,
+- if you skip the `body` in the `response`, then response will not return body
 
 Endpoints of given path should be accessible right away. If not, clear your cache.
 

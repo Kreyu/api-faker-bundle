@@ -13,7 +13,7 @@ class ConfigurationPool
     /**
      * @var array<Application>
      */
-    private $applications;
+    private $applications = [];
 
     private function __construct()
     {
@@ -35,14 +35,14 @@ class ConfigurationPool
                 }
 
                 $endpoints[] = new Endpoint($path, $endpoint['method'], new Response(
-                    $endpoint['response']['status'] ?? null,
-                    $endpoint['response']['body'] ?? null
+                    $endpoint['response']['status'],
+                    $endpoint['response']['body']
                 ));
             }
 
             $pool->applications[] = new Application(
                 $application['name'],
-                $application['prefix'] ?? null,
+                $application['prefix'],
                 $endpoints
             );
         }
