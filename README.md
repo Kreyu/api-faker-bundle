@@ -13,7 +13,7 @@ Specified endpoints will return specified (optional) json.
 $ composer require --dev kreyu/api-faker-bundle
 ```
 
-then, enable bundle in specific environments:
+then, enable bundle in dev environment:
 
 ```php
 # config/bundles.php
@@ -22,14 +22,14 @@ then, enable bundle in specific environments:
 
 return [
     // ...
-    Kreyu\Bundle\ApiFakerBundle\KreyuApiFakerBundle::class => ['dev' => true, 'test' => true],
+    Kreyu\Bundle\ApiFakerBundle\KreyuApiFakerBundle::class => ['dev' => true],
 ];
 ```
 
 and add routing configuration (prefixes are optional):
 
 ```yaml
-# config/routes.yaml
+# config/routes/dev/kreyu_api_faker.yaml
 
 api_faker:
   resource: .
@@ -41,7 +41,7 @@ api_faker:
 ## Configuration
 
 ```yaml
-# config/packages/kreyu_api_faker.yaml
+# config/packages/dev/kreyu_api_faker.yaml
 
 kreyu_api_faker:
   applications:
@@ -60,7 +60,7 @@ kreyu_api_faker:
 You can also define response `body` as raw json string:
 
 ```yaml
-# config/packages/kreyu_api_faker.yaml
+# config/packages/dev/kreyu_api_faker.yaml
 
 kreyu_api_faker:
   applications:
@@ -77,7 +77,7 @@ kreyu_api_faker:
 or even pass a path to a file:
 
 ```yaml
-# config/packages/kreyu_api_faker.yaml
+# config/packages/dev/kreyu_api_faker.yaml
 
 kreyu_api_faker:
   applications:
