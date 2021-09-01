@@ -45,7 +45,7 @@ kreyu_api_faker:
 
 kreyu_api_faker:
   default_headers: # used on endpoints with response without specified headers 
-    Content-Type: application/json 
+    Content-Type: application/json # this header is added by default 
   applications:
     - prefix: /auth-api
       endpoints:

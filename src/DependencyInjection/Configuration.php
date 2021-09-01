@@ -56,7 +56,7 @@ class Configuration implements ConfigurationInterface
             ->useAttributeAsKey('name')
             ->normalizeKeys(false)
             ->scalarPrototype()->end()
-            ->defaultValue(['Accept' => 'application/json']);
+            ->defaultValue(['Content-Type' => 'application/json']);
     }
 
     private function getApplicationsSection()
