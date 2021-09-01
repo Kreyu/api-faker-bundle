@@ -16,19 +16,19 @@ class EndpointAvailabilityTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testEndpointWithCustomResponseStatus()
+    public function testEndpointWithCustomResponseStatusCode()
     {
         $client = self::createClient();
-        $client->request('GET', '/test-api/endpoint-with-custom-response-status');
+        $client->request('GET', '/test-api/endpoint-with-custom-response-status-code');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
     }
 
-    public function testEndpointWithCustomResponseBody()
+    public function testEndpointWithCustomResponseContent()
     {
         $client = self::createClient();
-        $client->request('GET', '/test-api/endpoint-with-custom-response-body');
+        $client->request('GET', '/test-api/endpoint-with-custom-response-content');
 
         $this->assertResponseIsSuccessful();
 

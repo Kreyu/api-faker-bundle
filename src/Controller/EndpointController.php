@@ -4,36 +4,34 @@ declare(strict_types=1);
 
 namespace Kreyu\Bundle\ApiFakerBundle\Controller;
 
-use Kreyu\Bundle\ApiFakerBundle\Configuration\ConfigurationPool;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Kreyu\Bundle\ApiFakerBundle\Pool\EndpointPoolInterface;
+use Kreyu\Bundle\ApiFakerBundle\Response\Factory\EndpointResponseFactoryInterface;
+use Kreyu\Bundle\ApiFakerBundle\Routing\EndpointPoolLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EndpointController
 {
-    private $configurationPool;
+    private $endpointPool;
+    private $responseFactory;
 
-    public function __construct(ConfigurationPool $configurationPool)
+    public function __construct(EndpointPoolInterface $endpointPool, EndpointResponseFactoryInterface $responseFactory)
     {
-        $this->configurationPool = $configurationPool;
+        $this->endpointPool = $endpointPool;
+        $this->responseFactory = $responseFactory;
     }
 
     public function __invoke(Request $request): Response
     {
-        $endpoint = $this->configurationPool->getEndpointForPath($request->getPathInfo());
+        $endpoint = $this->endpointPool->getEndpointById(
+            $request->attributes->get(EndpointPoolLoader::ROUTE_ID_ATTRIBUTE)
+        );
 
         if (null === $endpoint) {
             throw new NotFoundHttpException();
         }
 
-        $body = $endpoint->getResponse()->getBody();
-        $status = $endpoint->getResponse()->getStatus();
-
-        if (null === $body && $status !== Response::HTTP_NO_CONTENT) {
-            return new Response($body, $status);
-        }
-
-        return new JsonResponse($body, $status, [], null !== $body);
+        return $this->responseFactory->createResponseForEndpoint($endpoint);
     }
 }

@@ -38,66 +38,34 @@ kreyu_api_faker:
   name_prefix: fake_api_ # optional
 ```
 
-## Configuration
+## Configuration reference
 
 ```yaml
 # config/packages/dev/kreyu_api_faker.yaml
 
 kreyu_api_faker:
+  default_headers: # used on endpoints with response without specified headers 
+    Accept: application/json 
   applications:
-    - name: Authentication API
-      prefix: /auth-api
+    - prefix: /auth-api
       endpoints:
         - path: /login
-          method: POST
+          method: POST # GET by default
           response:
-            status: 200
-            body:
-              token: totally_an_oauth_token
-              sessionLifetime: 1629989970
+            status_code: 200 # by default 200 if given body content, 204 otherwise
+            content_format: json # json (by default), xml, yaml, csv, null (serialization disabled)
+            content: # no content by default
+              foo: bar
+              lorem: ipsum
+            headers: # if not given, "default_headers" is used
+              Accept: application/json
 ```
 
-You can also define response `body` as raw json string:
+Above configuration will create a route `POST /fake-api/auth-api/login` named `fake_api_auth_api_login`, and return response with given status code and body content.
 
-```yaml
-# config/packages/dev/kreyu_api_faker.yaml
+**Note**: After changing the package configuration, clear the cache.
 
-kreyu_api_faker:
-  applications:
-    - name: Authentication API
-      prefix: /auth-api
-      endpoints:
-        - path: /login
-          method: POST
-          response:
-            status: 200
-            body: '{ "token": "totally_an_oauth_token", "sessionLifetime": 1629989970 }'
-```
-
-or even pass a path to a file:
-
-```yaml
-# config/packages/dev/kreyu_api_faker.yaml
-
-kreyu_api_faker:
-  applications:
-    - name: Authentication API
-      prefix: /auth-api
-      endpoints:
-        - path: /login
-          method: POST
-          response:
-            status: 200
-            body: '%kernel.project_dir%/resources/auth-api/login.json'
-```
-
-- if you skip the `response` section completely, then response will be `204 No Content` without body,
-- if you skip the `status` in the `response`, then response status code will be `200 OK` or `204 No Content`, depending on the given `body`,
-- if you skip the `body` in the `response`, then response will not return body
-
-Endpoints of given path should be accessible right away. If not, clear your cache.
-
-Above configuration will create a route `GET /fake-api/auth-api/login` named `fake_api_auth_api_login`, and return response with given status code and body.
+**Tip**: Response content can be also a path to file, which contents will be used on request.
 
 ## FAQ
 

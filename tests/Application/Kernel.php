@@ -7,7 +7,8 @@ namespace Kreyu\Bundle\ApiFakerBundle\Tests\Application;
 use Kreyu\Bundle\ApiFakerBundle\KreyuApiFakerBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
@@ -15,14 +16,50 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    public function configureRoutes(RoutingConfigurator $routes): void
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
-        $routes->import(__DIR__ . '/config/routes.yaml');
+        $container->loadFromExtension('framework', [
+            'test' => true,
+            'router' => [
+                'utf8' => true,
+            ],
+        ]);
+
+        $container->loadFromExtension('kreyu_api_faker', [
+            'applications' => [
+                [
+                    'prefix' => '/test-api',
+                    'endpoints' => [
+                        [
+                            'path' => '/endpoint-with-custom-method',
+                            'method' => 'POST',
+                        ], [
+                            'path' => '/endpoint-with-custom-response-status-code',
+                            'response' => [
+                                'status_code' => 201,
+                            ],
+                        ], [
+                            'path' => '/endpoint-with-custom-response-content',
+                            'response' => [
+                                'content' => [
+                                    'foo' => 'bar',
+                                    'lorem' => 'ipsum',
+                                ],
+                            ],
+                        ],
+                    ]
+                ]
+            ]
+        ]);
     }
 
-    public function configureContainer(ContainerConfigurator $container): void
+    protected function configureRoutes($routes)
     {
-        $container->import(__DIR__ . '/config/config.yml');
+        if ($routes instanceof RoutingConfigurator) {
+            $routes->import('.', 'kreyu_api_faker');
+        } else {
+            $routes->import('.', '', 'kreyu_api_faker');
+        }
     }
 
     public function getProjectDir(): string
