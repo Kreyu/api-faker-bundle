@@ -61,7 +61,7 @@ kreyu_api_faker:
               Content-Type: application/json
 ```
 
-Above configuration will create a route `POST /fake-api/auth-api/login` named `fake_api_auth_api_login`, and return response with given status code and body content.
+Above configuration will create a route `GET /fake-api/auth-api/login` named `fake_api_auth_api_login`, and return response with given status code and body content.
 
 **Note**: After changing the package configuration, clear the cache.
 
