@@ -45,12 +45,12 @@ kreyu_api_faker:
 
 kreyu_api_faker:
   default_headers: # used on endpoints with response without specified headers 
-    Accept: application/json 
+    Content-Type: application/json 
   applications:
     - prefix: /auth-api
       endpoints:
         - path: /login
-          method: POST # GET by default
+          method: GET # GET by default
           response:
             status_code: 200 # by default 200 if given body content, 204 otherwise
             content_format: json # json (by default), xml, yaml, csv, null (serialization disabled)
@@ -58,7 +58,7 @@ kreyu_api_faker:
               foo: bar
               lorem: ipsum
             headers: # if not given, "default_headers" is used
-              Accept: application/json
+              Content-Type: application/json
 ```
 
 Above configuration will create a route `POST /fake-api/auth-api/login` named `fake_api_auth_api_login`, and return response with given status code and body content.
